@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:myontology="http://localhost:8080/mydataset/">
+    
+
+      
+    <myontology:usedToWork  rdf:about="http://localhost:8080/mydataset/Semih_Yumusak.html">
+                <myontology:personName>Semih Yumuşak</myontology:personName>
+                <myontology:workedFor rdf:resource="KTO"></myontology:workedFor>
+    </myontology:usedToWork>
+    
+    <myontology:usedToWork  rdf:about="http://localhost:8080/mydataset/Enes_Sayaci.html">
+                <myontology:personName>Enes Sayacı</myontology:personName>
+                <myontology:workedFor rdf:resource="ABC"></myontology:workedFor>
+                <myontology:workedFor rdf:resource="KTO"></myontology:workedFor>
+                <myontology:workedFor rdf:resource="FİRMA"></myontology:workedFor>
+         <myontology:workedFor rdf:resource="FİRMA1"></myontology:workedFor>
+         <myontology:workedFor rdf:resource="FİRMA2"></myontology:workedFor>
+         <myontology:workedFor rdf:resource="FİRMA3"></myontology:workedFor>
+    </myontology:usedToWork>
+    
+    
+     <myontology:workRecord  rdf:about="KTO"> 
+                <myontology:companyName>KTO</myontology:companyName>
+                <myontology:workedOn>HTML</myontology:workedOn>
+                <myontology:workedOn>CSS</myontology:workedOn>
+                <myontology:workedOn>JAVASCRIPT</myontology:workedOn>
+                <myontology:workedOn>C#</myontology:workedOn>
+    </myontology:workRecord>
+    
+    
+    <myontology:workRecord  rdf:about="ABC">
+                <myontology:companyName>ABC</myontology:companyName>
+                <myontology:workedOn>PYTHON</myontology:workedOn>
+    </myontology:workRecord>
+    <myontology:workRecord  rdf:about="FİRMA">
+                <myontology:companyName>FİRMA</myontology:companyName>
+                <myontology:workedOn>CSS</myontology:workedOn>
+    </myontology:workRecord>
+    <myontology:workRecord  rdf:about="FİRMA1">
+                <myontology:companyName>FİRMA1</myontology:companyName>
+                <myontology:workedOn>FORTRAN</myontology:workedOn>
+        <myontology:workedOn>CSS</myontology:workedOn>
+    </myontology:workRecord>
+    <myontology:workRecord  rdf:about="FİRMA2">
+                <myontology:companyName>FİRMA2</myontology:companyName>
+                <myontology:workedOn>CSS</myontology:workedOn>
+    </myontology:workRecord>
+    <myontology:workRecord  rdf:about="FİRMA3">
+                <myontology:companyName>FİRMA3</myontology:companyName>
+                <myontology:workedOn>ASSEMBLY</myontology:workedOn>
+        <myontology:workedOn>CSS</myontology:workedOn>
+        <myontology:workedOn>PYTHON</myontology:workedOn>
+        <myontology:workedOn>C#</myontology:workedOn>
+    </myontology:workRecord>
+   
+    
+</rdf:RDF>
+
+
+
+
