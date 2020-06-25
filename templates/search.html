@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en" style="height: 100%;">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Semantic Search</title>
+    <link rel="stylesheet" href="../static/css/styles.min.css">
+    <style>
+        @media only screen and (min-width:796px) {
+            body{
+            height: 100%;
+            overflow: hidden;
+        }
+        }
+        
+    #main-areaheader:after{
+    position:absolute;
+    top:25%;
+     content:"";
+      width:99.5%;
+     height:3px;
+     background-color:#f5f5f5;
+    }
+    #main-areaheader:before{
+    position:absolute;
+    top:60%;
+     content:"";
+     width:99.5%;
+     height:3px;
+     background-color:#f5f5f5;
+    }
+</style>
+
+    <style type="text/css">
+
+    
+    .canvas_area {
+    position:relative;
+    width:500px;
+    height:500px;
+    overflow:hidden;
+}
+    
+</style>
+</head>
+    <body style="height: 100%;" onload="draw()">
+<script type="text/javascript">
+
+ var nodes = [];
+ var nodesJson = JSON.parse('{{ list | tojson | safe}}');
+
+ for (var i =0 ; i< nodesJson.length ;i++){
+   k=1;
+   if (i == 0 ){
+      k = 0;
+       nodes[i] = {id: i , value : k , label:nodesJson[i].companyName, directLink : "https://www.elitcreative.com/",linkAreaX : 1 , linkAreaY: 1 , pointX : 1 , pointY: 1}; 
+   }
+   else{
+      nodes[i] = {id: i , value : k , label:nodesJson[i].companyName, directLink : "https://www.elitcreative.com/",linkAreaX : 1 , linkAreaY: 1 , pointX : 1 , pointY: 1}; 
+   }
+   
+   
+}
+ var ctx;
+ var ctx1;
+ var ctx2;
+ var ctx3;
+ var ctx4;
+ var goTo="http://stackoverflow.com";
+ var linkX=240;
+ var linkY=240;
+ var linkHeight=10;
+ var linkWidth;
+ var inLink = false;
+ Root = nodes[0];
+ Experiences = [];
+ var index = 0;
+    
+ for(var i = 0; i< nodes.length ; i++){
+     if(nodes[i].value == 1){
+         var element = {id : nodes[i].id ,value:nodes[i].value, label: nodes[i].label , directLink: nodes[i].directLink} ;
+         Experiences.push(element);
+     }
+ }
+    
+    
+  function draw(){
+ dragElement(document.getElementById("main-area-canvas"));
+   canvas = document.getElementById("myCanvas");
+   canvas1 = document.getElementById("myLines");
+   canvas2 = document.getElementById("myCircles");
+   canvas3 = document.getElementById("myInfos");
+   canvas4 = document.getElementById("linkCanvas");
+  // check if supported
+  if(canvas.getContext){
+
+    ctx=canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+    var linkTextRoot = Root.value;  
+      
+    ctx.font='14px sans-serif';
+    ctx.fillStyle = "#d15454";
+    ctx.fillText(linkTextRoot,linkX,linkY);
+      
+    linkWidth=ctx.measureText(linkTextRoot).width;
+      
+    nodes[0].linkAreaX = linkX + linkWidth;
+    nodes[0].linkAreaY = linkY-linkHeight;   
+    nodes[0].pointX = linkX;
+    nodes[0].pointY = linkY;
+      
+    Root.linkAreaX = linkX + linkWidth;
+    Root.linkAreaY = linkY-linkHeight;   
+    Root.pointX = linkX;
+    Root.pointY = linkY;
+
+      
+    var ExperiencesAmount = Experiences.length;
+    var angleBetweenNodes = (360/ExperiencesAmount) * Math.PI / 180;
+      
+      
+    //add mouse listeners
+    canvas.addEventListener("mousemove", on_mousemove, false);
+    canvas.addEventListener("click", on_click, false);
+      
+    //draw the link
+    var factor;
+      
+    for( var i = 0 ; i<ExperiencesAmount ; i++){
+      var linkText = Experiences[i].value;    
+      if (i ==0){
+          factor = 1;
+      }
+      else{
+          factor = i+1;
+      }
+      ctx.font='14px sans-serif';
+      ctx.fillStyle = "#fff";
+        
+      creatingPointX = (Math.cos(angleBetweenNodes*factor) * 75)+240;
+      creatingPointY = (Math.sin(angleBetweenNodes*factor) * 75)+240;
+        
+      ctx.fillText(linkText,creatingPointX,creatingPointY);
+      linkWidth=ctx.measureText(linkText).width;
+        
+      Experiences[i].linkAreaX = linkX + linkWidth;
+      Experiences[i].linkAreaY = linkY-linkHeight;   
+      Experiences[i].pointX = creatingPointX;
+      Experiences[i].pointY = creatingPointY;
+        
+      nodes[i+1].linkAreaX = creatingPointX + linkWidth;
+      nodes[i+1].linkAreaY = creatingPointY-linkHeight;   
+      nodes[i+1].pointX = creatingPointX;
+      nodes[i+1].pointY = creatingPointY;
+                  
+  }
+   
+      
+      
+  }
+  if(canvas1.getContext){
+      ctx1=canvas1.getContext("2d");
+      ctx1.clearRect(0, 0, canvas.width, canvas.height);
+      
+      for(var i=0; i<ExperiencesAmount; i++){
+          
+        ctx1.beginPath();
+        ctx1.moveTo(Root.pointX+6, Root.pointY-5);
+        ctx1.lineTo(Experiences[i].pointX+6, Experiences[i].pointY-5);
+        ctx1.stroke();
+          
+      }
+      
+   }
+   if(canvas2.getContext){
+          ctx2 = canvas2.getContext("2d");
+          ctx2.clearRect(0, 0, canvas.width, canvas.height);
+          ctx2.beginPath();
+          ctx2.arc(linkX+5, linkY-6, 15, 0, 2 * Math.PI);
+          ctx2.shadowColor = 'black';
+          ctx2.strokeStyle = "rgba(0,0,0,1)";
+          ctx2.shadowBlur = 5;
+          ctx2.shadowOffsetX = 0;
+          ctx2.shadowOffsetY = 0;
+          ctx2.fillStyle = "#f2f2f2";
+          ctx2.fill();
+          var grd;
+       
+          for(var i=0; i<ExperiencesAmount ; i++){
+              
+            ctx2.beginPath();
+            ctx2.arc(Experiences[i].pointX+5, Experiences[i].pointY-6, 20, 0, 2 * Math.PI);
+            nodes[i+1].linkAreaX +=15;
+            nodes[i+1].linkAreaY -=15;  
+            nodes[i+1].pointX -= 15;
+            nodes[i+1].pointY += 15;
+            ctx2.shadowColor = 'black';
+            ctx2.strokeStyle = "rgba(0,0,0,1)";
+            ctx2.shadowBlur = 5;
+            ctx2.shadowOffsetX = 0;
+            ctx2.shadowOffsetY = 0;
+            grd = ctx2.createLinearGradient(Experiences[i].pointX+5, Experiences[i].pointY-6, 10, Experiences[i].pointX+5, Experiences[i].pointY-6,30);
+            grd.addColorStop(0, "#10b065");
+            grd.addColorStop(1, "#fff");
+            ctx2.fillStyle = grd;
+            ctx2.fill();
+             
+          }
+
+   }
+   if(canvas3.getContext){
+          ctx3 = canvas3.getContext("2d");
+          ctx3.clearRect(0, 0, canvas.width, canvas.height);     
+   }
+      if(canvas4.getContext){
+          ctx4 = canvas4.getContext("2d");
+          ctx4.clearRect(0, 0, canvas.width, canvas.height);  
+          canvas4.addEventListener("mousemove", on_mousemove, false);
+    canvas4.addEventListener("click", on_click, false);
+   }
+      
+}
+function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+  if (typeof stroke === 'undefined') {
+    stroke = true;
+  }
+  if (typeof radius === 'undefined') {
+    radius = 5;
+  }
+  if (typeof radius === 'number') {
+    radius = {tl: radius, tr: radius, br: radius, bl: radius};
+  } else {
+    var defaultRadius = {tl: 0, tr: 0, br: 0, bl: 0};
+    for (var side in defaultRadius) {
+      radius[side] = radius[side] || defaultRadius[side];
+    }
+  }
+  ctx.beginPath();
+  ctx.moveTo(x + radius.tl, y);
+  ctx.lineTo(x + width - radius.tr, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
+  ctx.lineTo(x + width, y + height - radius.br);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
+  ctx.lineTo(x + radius.bl, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
+  ctx.lineTo(x, y + radius.tl);
+  ctx.quadraticCurveTo(x, y, x + radius.tl, y);
+  ctx.closePath();
+  if (fill) {
+    ctx.fill();
+  }
+  if (stroke) {
+    ctx.stroke();
+  }
+
+}
+    //check if the mouse is over the link and change cursor style
+function on_mousemove (ev) {
+  var x, y;
+  // Get the mouse position relative to the canvas element.
+  if (ev.layerX || ev.layerX == 0) { //for firefox
+    x = ev.layerX;
+    y = ev.layerY;
+  }
+  x-=canvas4.offsetLeft;
+  y-=canvas4.offsetTop;
+  document.body.style.cursor = "default";
+  inLink = false;
+  ctx3.clearRect(0, 0, canvas.width, canvas.height);
+  ctx4.clearRect(0, 0, canvas.width, canvas.height);
+  //is the mouse over the link?
+    var numberOfItems = nodes.length;
+    for( var i = 0 ; i<numberOfItems ; i++){
+        for (var j = nodes[i].pointX ; j <= nodes[i].linkAreaX ; j++){
+            if(x >= j && x<= nodes[i].linkAreaX)
+                {
+                    if(y >= nodes[i].linkAreaY && y<= nodes[i].pointY){
+                        document.body.style.cursor = "pointer";
+                        if(i==0){
+                        ctx4.beginPath();
+                         ctx4.arc(nodes[i].pointX+5, nodes[i].pointY-6, 20, 0, 2 * Math.PI);
+                         ctx4.shadowColor = 'black';
+                         ctx4.strokeStyle = "rgba(112, 0, 28,0.2)";
+                         ctx4.shadowBlur = 7;
+                         ctx4.shadowOffsetX = 0;
+                         ctx4.shadowOffsetY = 0;
+
+                         ctx4.stroke();
+                        }
+                        else{
+                         ctx4.beginPath();
+                         ctx4.arc(nodes[i].pointX+20, nodes[i].pointY-21, 25, 0, 2 * Math.PI);
+                         ctx4.shadowColor = 'black';
+                         ctx4.strokeStyle = "rgba(112, 0, 30,0.2)";
+                         ctx4.lineWidth=3;
+                         ctx4.shadowBlur = 7;
+                         ctx4.shadowOffsetX = 0;
+                         ctx4.shadowOffsetY = 0;
+
+                         ctx4.stroke();
+                        }
+                        inLink = true;
+                        goTo = nodes[i].directLink;
+                         ctx3.fillStyle = "#434545";
+                        roundRect(ctx3,x,y,150,250,5,true,true);
+                        ctx4.font='14px sans-serif';
+                        ctx4.fillStyle = "#fff";
+                        wrapText(ctx4,nodes[i].label,x+9,y+20,140,20);
+                        break;
+                    }
+                }
+        }        
+    }
+}
+ function wrapText(context, text, x, y, maxWidth, lineHeight) {
+        var words = text.split(' ');
+        var line = '';
+
+        for(var n = 0; n < words.length; n++) {
+          var testLine = line + words[n] + ' ';
+          var metrics = context.measureText(testLine);
+          var testWidth = metrics.width;
+          if (testWidth > maxWidth && n > 0) {
+            context.fillText(line, x, y);
+            line = words[n] + ' ';
+            y += lineHeight;
+          }
+          else {
+            line = testLine;
+          }
+        }
+        context.fillText(line, x, y);
+      }
+
+//if the link has been clicked, go to link
+function on_click(e) {
+  if (inLink)  {
+    window.location = goTo;
+  }
+}
+
+
+
+function dragElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  if (document.getElementById(elmnt.id + "header")) {
+    /* if present, the header is where you move the DIV from:*/
+    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+  } else {
+    /* otherwise, move the DIV from anywhere inside the DIV:*/
+    elmnt.onmousedown = dragMouseDown;
+  }
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the element's new position:
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement() {
+    /* stop moving when mouse button is released:*/
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
+
+
+</script>
+
+<div class="container" style="height: 100%;">
+<div class="row" style="height: 100%;">
+ <div class="col-md-6 py-3" style="height: 100%;">
+<form action="." method="post" style="height:100%;">
+<div class="auth-main w-100" style="height: 100%;">
+    <div class="auth-form w-100" style="height: 100%;">
+        
+        <div class="title">Search</div>
+        
+        <div class="auth-form-content">
+
+            <div class="halfBox d-flex flex-column mt-4" style="position:relative;">
+
+            <input name="search" type="text" class="form-control gray cname" placeholder="for example: CSS" value="{{key}}">
+
+        </div> 
+           
+
+
+        </div>
+        <div class="auth-form-footer">
+            <div><button class="btn btn-link btn-green btn-animation">Search</button></div>
+            <p class="mt-2 px-5" style="color:red;">{{alert}}</p>
+            <p class="mt-2 px-5" style="color:red;">{{infoMessage}} <span style="font-weight:bold;">{{key}}</span></p>
+        </div>
+        
+    </div>
+</div>
+</form>
+ </div> 
+ <div class="col-md-6  py-3">
+     <div>
+         {{infoMessage2}}
+     </div>
+         <div id="main-area-canvas" style="overflow:hidden; position:absolute; height:500px; width:500px; z-index:9; border:1px solid #2f2e47; border-radius:4px; box-shadow: 0px 5px 19px 0px #b0b0b0 !important; padding: 0; background-color:#fff;" >
+    <div id="main-areaheader" style="z-index:10; cursor: move; background-color:#434545; border-top-right-radius:4px; border-top-left-radius:4px; display:flex; justify-content:center; height:20px; position:relative;"></div>
+       <div class="canvasarea" style=" position:relative; height:100%; width:100%; overflow:hidden;">
+
+
+         <canvas id="linkCanvas" width="500" height="500" style=" z-index: 4; position: absolute; top: 0; left: 0;"> </canvas>
+        <canvas id="myInfos" width="500" height="500" style=" z-index: 3; position: absolute; top: 0; left: 0;"> </canvas>
+        <canvas id="myCanvas" width="500" height="500" style=" z-index: 2; position: absolute; top: 0; left: 0;"> </canvas>
+        <canvas id="myCircles" width="500" height="500" style="z-index: 1; position: absolute; top: 0; left: 0;"> </canvas>
+        <canvas id="myLines" width="500" height="500" style="z-index: 0; position: absolute; top: 0; left: 0;"> </canvas>
+
+
+    </div>
+   </div>
+</div>
+
+</div>    
+</div>
+
+<script src="script/scripts.min.js?v=a588107a77ddfc54378a0069f6f7a993"></script>
+</body>
+</html>
