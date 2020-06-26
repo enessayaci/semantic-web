@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request
 import myQuery as myQuery
+
+
 app=Flask(__name__)
 
 
