@@ -36,4 +36,13 @@ def get_value():
         return render_template('search.html', list = listOfExperimentsOfPopPerson,key=searchInput,infoMessage=infoMessage,infoMessage2=infoMessage2)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    HOST = environ.get('0.0.0.0', 'localhost')
+
+    try:
+        PORT = int(environ.get('80', '5000'))
+    except ValueError:
+        PORT = 80
+    #Sinif().sinif()
+    
+    app.run(HOST, PORT)
+    #socketio.run(app, debug=True)
