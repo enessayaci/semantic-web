@@ -9,7 +9,7 @@ app=Flask(__name__)
 @app.route('/')
 def index():
     return render_template('search.html',list =[]) #uygulama çalıştığında bu sayfayı açıyorum
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['GET','POST'])
 def get_value():
 
     searchInput=request.form['search']  #arama motorundan girdi alıyorum
