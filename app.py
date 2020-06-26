@@ -1,8 +1,5 @@
 from flask import Flask, render_template, request
 import myQuery as myQuery
-import requirements_generator
-r=requirements_generator.scan(".")
-r.save()
 app=Flask(__name__)
 
 
