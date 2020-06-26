@@ -3,10 +3,10 @@ import myQuery as myQuery
 app=Flask(__name__)
 
 
-@app.route('/')
+@app.route('/search')
 def index():
     return render_template('search.html',list =[]) #uygulama çalıştığında bu sayfayı açıyorum
-@app.route('/', methods=['GET','POST'])
+@app.route('/search', methods=['GET','POST'])
 def get_value():
 
     searchInput=request.form['search']  #arama motorundan girdi alıyorum
